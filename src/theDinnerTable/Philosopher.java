@@ -10,5 +10,9 @@ public class Philosopher implements Runnable{
 	public void run() {
 		
 	}
+	
+	public void eatRice() {
+		
+	}
 
 }
