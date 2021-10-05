@@ -128,7 +128,7 @@ public class Philosopher implements Runnable {
 		riceRequested = (int) Math.random() * 3;
 		riceRecieved = t.removeRice(riceRequested);
 		riceEaten += riceRecieved;
-		System.out.println(thread.getName() + " ate " + riceRecieved + " ounces of rice");
+		System.out.println(thread.getName() + " ate " + riceRecieved + " ounces of rice.");
 		doPhilosophy();
 		returnChopsticks();
 		state = State.Thinking;
@@ -150,6 +150,9 @@ public class Philosopher implements Runnable {
 	 */
 	public synchronized void returnChopsticks() {
 		t.placeChopsticks(chopsticks);
+		System.out.println(thread.getName() + " placed " + 
+				chopsticks[0].toString() + " and " + 
+				chopsticks[1].toString() + " back on the table.");
 		chopsticks = null;
 	}
 	
