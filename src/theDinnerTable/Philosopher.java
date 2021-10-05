@@ -96,6 +96,7 @@ public class Philosopher implements Runnable {
 				break;
 			}
 		}
+		System.out.println(thread.getName() + " has eaten a total of " + riceEaten + " ounces of rice.");
 	}
 
 	/**
@@ -104,6 +105,7 @@ public class Philosopher implements Runnable {
 	public void think() {
 		doPhilosophy();
 		state = State.Hungry;
+		System.out.println(thread.getName() + " is thinking.");
 	}
 
 	/**
@@ -114,6 +116,7 @@ public class Philosopher implements Runnable {
 	public void hungry() {
 		setChopsticks(t.findChopsticks(this));
 		state = State.Eating;
+		System.out.println(thread.getName() + " picked up " + chopsticks[0].toString() + " and " + chopsticks[1].toString());
 	}
 
 	/**
@@ -121,8 +124,11 @@ public class Philosopher implements Runnable {
 	 */
 	public void eatRice() {
 		int riceRequested;
+		int riceRecieved;
 		riceRequested = (int) Math.random() * 3;
-		riceEaten += t.removeRice(riceRequested);
+		riceRecieved = t.removeRice(riceRequested);
+		riceEaten += riceRecieved;
+		System.out.println(thread.getName() + " ate " + riceRecieved + " ounces of rice");
 		doPhilosophy();
 		returnChopsticks();
 		state = State.Thinking;

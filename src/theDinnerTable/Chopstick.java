@@ -9,6 +9,11 @@ public class Chopstick {
 		inUse = false;
 	}
 	
+	@Override
+	public String toString() {
+		return "chopstick " + pos;
+	}
+	
 	public boolean isInUse() {
 		return inUse;
 	}
