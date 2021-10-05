@@ -2,7 +2,6 @@ package theDinnerTable;
 
 public class Chopstick {
 	private final int pos;
-	private Philosopher p;
 	private boolean inUse;
 	
 	Chopstick(int pos) {
@@ -19,7 +18,6 @@ public class Chopstick {
 	}
 	
 	public void setDown() {
-		p = null;
 		inUse = false;
 	}
 }

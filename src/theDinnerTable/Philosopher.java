@@ -13,7 +13,7 @@ public class Philosopher implements Runnable {
 
 		final int thinkTime;
 
-		private State(int thinkTime) {
+		State(int thinkTime) {
 			this.thinkTime = thinkTime;
 		}
 	}
@@ -26,10 +26,16 @@ public class Philosopher implements Runnable {
 	
 	private Chopstick[] chopsticks;
 	
+	private int riceEaten;
+	
 	private volatile boolean timeToThink;
+	
+	private Table t;
 
-	public Philosopher(int threadNum) {
+	public Philosopher(Table t, int threadNum) {
 		this.state = State.Thinking;
+		this.t = t;
+		riceEaten = 0;
 		chopsticks = new Chopstick[2];
 		// because he who thinks deeply is anxious
 		this.thread = new Thread(this, "Anxiety-ridden Person[" + threadNum + "]");
@@ -77,14 +83,27 @@ public class Philosopher implements Runnable {
 	
 	@Override
 	public void run() {
-
+		while(timeToThink) {
+			switch (state) {
+			case Thinking:
+				think();
+				break;
+			case Hungry:
+				hungry();
+				break;
+			case Eating:
+				eatRice();
+				break;
+			}
+		}
 	}
 
 	/**
 	 * @desc literally idles for a random time
 	 */
 	public void think() {
-
+		doPhilosophy();
+		state = State.Hungry;
 	}
 
 	/**
@@ -93,14 +112,20 @@ public class Philosopher implements Runnable {
 	 *       if they're available
 	 */
 	public void hungry() {
-		
+		setChopsticks(t.findChopsticks(this));
+		state = State.Eating;
 	}
 
 	/**
 	 * @desc eats rice
 	 */
 	public void eatRice() {
-
+		int riceRequested;
+		riceRequested = (int) Math.random() * 3;
+		riceEaten += t.removeRice(riceRequested);
+		doPhilosophy();
+		returnChopsticks();
+		state = State.Thinking;
 	}
 
 	/**
@@ -117,8 +142,18 @@ public class Philosopher implements Runnable {
 	/**
 	 * @desc puts chopsticks back on the table IN THE SAME SPOTS they were in
 	 */
-	public void returnSticks() {
-
+	public synchronized void returnChopsticks() {
+		t.placeChopsticks(chopsticks);
+		chopsticks = null;
+	}
+	
+	private void doPhilosophy() {
+		// Sleep for the amount of time necessary to do the state
+		try {
+			Thread.sleep(state.thinkTime);
+		} catch (InterruptedException e) {
+			System.err.println("Philosoper [" + pos + "] thought to hard and hurt themselves in their own confusion.");
+		}
 	}
 
 }
