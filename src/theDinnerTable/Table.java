@@ -5,14 +5,24 @@ import java.util.ArrayList;
 public class Table {
 	
 	private static final int NUM_PHILS = 5;
-	private static final int NUM_TABLES = 1;
+	//private static final int NUM_TABLES = 1;
 	private static final int OUNCES_OF_RICE = 64;
 	
 	public static void main(String[] args) {
 		
-
+		System.out.println("Dinner has started.");
 		
+		Table t = new Table();
 		
+		for( Philosopher p : t.phils) {
+			p.startThinking();
+		}
+		
+		for( Philosopher p : t.phils) {
+			p.waitToStopThinking();
+		}
+		
+		System.out.println("Dinner has ended.");
 	}
 	
 	private Philosopher[] phils;
@@ -33,23 +43,36 @@ public class Table {
 		final int pos = p.getPos();
 		final int[] range = posRange(pos);
 		ArrayList<Chopstick> chops = new ArrayList<Chopstick>();
-		while (chops.size() < 2) {
-			for (int i : range) {
-				if(!this.chopsticks.get(i).isInUse()) {
-					chops.add(chopsticks.get(i));
-				} else {
-					synchronized (chopsticks) {
-						try {
-							chopsticks.wait();
-						} catch (InterruptedException ignored) {}
+		synchronized (chopsticks) {
+			while (chops.size() < 2) {
+				for (int i : range) {
+					Chopstick c = chopsticks.get(i);
+					if(!c.isInUse()) {
+						c.pickUp();
+						chops.add(c);
+					} else {
+						// Prevents Deadlock from everyone holding one stick.
+						for(Chopstick chop : chops) {
+							chop.setDown();
+						}
+						chops.clear();
+						
+						/* 
+						 * Makes the Philosophers wait until a Chopstick is put 
+						 * back on the table before trying to find two again.
+						 */
+						
+							try {
+								chopsticks.wait();
+							} catch (InterruptedException ignored) {}
+						}
 					}
 				}
-			}
 		}
-		return chopsticks;
+		return chops;
 	}
 	
-	public void placeChopsticks(Chopstick[] chopstick) {
+	public void placeChopsticks(ArrayList<Chopstick> chopstick) {
 		synchronized (chopsticks) {
 			chopsticks.notifyAll();
 		}
@@ -68,15 +91,15 @@ public class Table {
 		return new int[] {pos-1,pos,pos+1};
 	}
 	
-	public int removeRice(int request) {
-		if (request > riceBowl) {
-			request = riceBowl;
-			riceBowl = 0;
-			return request;
-		}
-		else {
+	public synchronized int removeRice(int request) {
+			request = Math.min(request, riceBowl);
 			riceBowl -= request;
+			//System.out.println("Rice Bowl: " + riceBowl);
 			return request;
-		}
 	}
+	
+	public synchronized int getRiceBowl() {
+		return riceBowl;
+	}
+	
 }

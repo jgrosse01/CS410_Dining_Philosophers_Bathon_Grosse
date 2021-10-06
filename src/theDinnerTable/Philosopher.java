@@ -1,5 +1,7 @@
 package theDinnerTable;
 
+import java.util.ArrayList;
+
 public class Philosopher implements Runnable {
 
 	private enum State {
@@ -8,7 +10,7 @@ public class Philosopher implements Runnable {
 
 		// random thinking time between 0 and 10 seconds
 		private static int randomThinkingTime() {
-			return (int) Math.random() * 10000;
+			return (int) (Math.random() * 5000);
 		}
 
 		final int thinkTime;
@@ -24,11 +26,9 @@ public class Philosopher implements Runnable {
 	
 	private final int pos;
 	
-	private Chopstick[] chopsticks;
+	private ArrayList<Chopstick> chopsticks;
 	
 	private int riceEaten;
-	
-	private volatile boolean timeToThink;
 	
 	private Table t;
 
@@ -36,7 +36,7 @@ public class Philosopher implements Runnable {
 		this.state = State.Thinking;
 		this.t = t;
 		riceEaten = 0;
-		chopsticks = new Chopstick[2];
+		chopsticks= new ArrayList<Chopstick>();
 		// because he who thinks deeply is anxious
 		this.thread = new Thread(this, "Anxiety-ridden Person[" + threadNum + "]");
 		pos = threadNum;
@@ -50,22 +50,14 @@ public class Philosopher implements Runnable {
 	 * @desc Has the Philosopher start thinking.
 	 */
 	public void startThinking() {
-		timeToThink = true;
 		thread.start();
-	}
-
-	/*
-	 * @desc stops the Philosopher from thinking.
-	 */
-	public void stopThinking() {
-		timeToThink = false;
 	}
 
 
 	/*
 	 * @desc waits for the Philosophers to stop what they are doing.
 	 */
-	public void waitToStop() {
+	public void waitToStopThinking() {
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
@@ -83,7 +75,7 @@ public class Philosopher implements Runnable {
 	
 	@Override
 	public void run() {
-		while(timeToThink) {
+		while(t.getRiceBowl() != 0) {
 			switch (state) {
 			case Thinking:
 				think();
@@ -103,9 +95,9 @@ public class Philosopher implements Runnable {
 	 * @desc literally idles for a random time
 	 */
 	public void think() {
+		System.out.println(thread.getName() + " is thinking.");
 		doPhilosophy();
 		state = State.Hungry;
-		System.out.println(thread.getName() + " is thinking.");
 	}
 
 	/**
@@ -114,9 +106,10 @@ public class Philosopher implements Runnable {
 	 *       if they're available
 	 */
 	public void hungry() {
+		System.out.println (thread.getName() + " is Hungry.");
 		setChopsticks(t.findChopsticks(this));
 		state = State.Eating;
-		System.out.println(thread.getName() + " picked up " + chopsticks[0].toString() + " and " + chopsticks[1].toString());
+		System.out.println(thread.getName() + " picked up " + chopsticks.get(0).toString() + " and " + chopsticks.get(1).toString());
 	}
 
 	/**
@@ -125,7 +118,7 @@ public class Philosopher implements Runnable {
 	public void eatRice() {
 		int riceRequested;
 		int riceRecieved;
-		riceRequested = (int) Math.random() * 3;
+		riceRequested = Math.max((int) (Math.random() * 3), 1);
 		riceRecieved = t.removeRice(riceRequested);
 		riceEaten += riceRecieved;
 		System.out.println(thread.getName() + " ate " + riceRecieved + " ounces of rice.");
@@ -137,11 +130,11 @@ public class Philosopher implements Runnable {
 	/**
 	 * @desc acquires chopsticks from the table
 	 */
-	public synchronized void setChopsticks(Chopstick[] chopsticks) {
+	public synchronized void setChopsticks(ArrayList<Chopstick> chopsticks) {
 	  this.chopsticks = chopsticks;
 	}
 	
-	public synchronized Chopstick[] getChopsticks() {
+	public synchronized ArrayList<Chopstick> getChopsticks() {
 		  return chopsticks;
 		}
 	
@@ -151,8 +144,8 @@ public class Philosopher implements Runnable {
 	public synchronized void returnChopsticks() {
 		t.placeChopsticks(chopsticks);
 		System.out.println(thread.getName() + " placed " + 
-				chopsticks[0].toString() + " and " + 
-				chopsticks[1].toString() + " back on the table.");
+				chopsticks.get(0).toString() + " and " + 
+				chopsticks.get(1).toString() + " back on the table.");
 		chopsticks = null;
 	}
 	
