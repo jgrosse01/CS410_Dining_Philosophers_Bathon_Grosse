@@ -7,6 +7,16 @@
 # BlueJ files
 *.ctxt
 
+# Eclipse files
+.metadata/
+bin/
+*.settings
+*.project
+*.classpath
+
+# Ant files
+dist/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
