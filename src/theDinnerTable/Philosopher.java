@@ -164,14 +164,23 @@ public class Philosopher implements Runnable {
 	 * @desc Tells the {@code Philosopher} to eat rice.
 	 */
 	public void eatRice() {
+		// initialize rice vars
 		int riceRequested;
 		int riceRecieved;
+		
+		// rice requested is a random number between 1 and 3
 		riceRequested = Math.max((int) (Math.random() * 3), 1);
+		// rice received is the min between rice requested and rice in the bowl
 		riceRecieved = t.removeRice(riceRequested);
+		// add total to rice eaten
 		riceEaten += riceRecieved;
+		// print that the Philosopher ate riceReceieved amount of rice
 		System.out.println(thread.getName() + " ate " + riceRecieved + " ounces of rice.");
+		// thread takes time to do the thing
 		doPhilosophy();
+		// put down the chopsticks
 		returnChopsticks();
+		// set state back to thinking
 		state = State.Thinking;
 	}
 
@@ -194,9 +203,12 @@ public class Philosopher implements Runnable {
 	 * @desc Puts {@code Chopstick} objects back on the table IN THE SAME SPOTS they were in before.
 	 */
 	public synchronized void returnChopsticks() {
+		// places chopsticks back down on the table
 		t.placeChopsticks(chopsticks);
+		// print that this is done
 		System.out.println(thread.getName() + " placed " + chopsticks.get(0).toString() + " and "
 				+ chopsticks.get(1).toString() + " back on the table.");
+		// set the list of currently held chopsticks to null
 		chopsticks = null;
 	}
 	
