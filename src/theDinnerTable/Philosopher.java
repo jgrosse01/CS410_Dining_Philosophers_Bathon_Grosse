@@ -10,8 +10,10 @@ import java.util.List;
  * 
  * @author Jaden Bathon and Jake Grosse
  *
- * @see Runnable
  * @see Chopstick
+ * @see Runnable
+ * @see List
+ * @see ArrayList
  */
 public class Philosopher implements Runnable {
 
