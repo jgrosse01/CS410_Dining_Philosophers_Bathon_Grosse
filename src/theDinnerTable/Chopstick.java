@@ -4,7 +4,6 @@ package theDinnerTable;
  * @desc Class which defines {@code Chopstick}
  * 
  * @author Jaden Bathon and Jake Grosse
- *
  */
 public class Chopstick {
 	// instance variables defining a chopstick
