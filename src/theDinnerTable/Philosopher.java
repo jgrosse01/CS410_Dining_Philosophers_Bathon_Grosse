@@ -2,21 +2,32 @@ package theDinnerTable;
 
 import java.util.ArrayList;
 
+/**
+ * @desc A class which defines a {@code Philosopher}. It runs a thread which attempts to eat rice from a bowl off its assigned table by sharing {@code Chopstick} objects with other instances of {@code Philosopher}.
+ * 
+ * @author Jaden Bathon and Jake Grosse
+ *
+ * @see Runnable
+ * @see Chopstick
+ */
 public class Philosopher implements Runnable {
 
+	// private enumeration which defines the state of a Philosopher as Thinking for a random amount of time, Hungry until they eat, or eating for 100ms.
 	private enum State {
 		// negative times to indicate that it doesn't matter, must incorporate in code
 		Thinking(randomThinkingTime()), Hungry(-1), Eating(100);
 
-		// random thinking time between 0 and 10 seconds
+		// random thinking time between 0 and 5 seconds
 		private static int randomThinkingTime() {
 			return (int) (Math.random() * 5000);
 		}
 
-		final int thinkTime;
+		// instance variable of state defining the thinking time for each philosopher object
+		final int stateTime;
 
-		State(int thinkTime) {
-			this.thinkTime = thinkTime;
+		// constructor 
+		State(int stateTime) {
+			this.stateTime = stateTime;
 		}
 	}
 
@@ -152,7 +163,7 @@ public class Philosopher implements Runnable {
 	private void doPhilosophy() {
 		// Sleep for the amount of time necessary to do the state
 		try {
-			Thread.sleep(state.thinkTime);
+			Thread.sleep(state.stateTime);
 		} catch (InterruptedException e) {
 			System.err.println("Philosoper [" + pos + "] thought to hard and hurt themselves in their own confusion.");
 		}
