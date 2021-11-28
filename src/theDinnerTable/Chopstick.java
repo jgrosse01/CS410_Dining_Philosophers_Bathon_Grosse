@@ -40,18 +40,15 @@ public class Chopstick {
 	public boolean isInUse() {
 		return inUse;
 	}
-
-	/**
-	 * @desc A method which allows a {@code Philosopher} to pick up a {@code Chopstick}.
-	 */
-	public void pickUp() {
+	
+	public synchronized void pickUp() {
+      if (inUse) {
+        throw new IllegalStateException("Attempt to steal a chopstick from another Philosopher");
+      }
 		inUse = true;
 	}
-
-	/**
-	 * @desc A method which allows a {@code Philosopher} to pick up a {@code Chopstick}.
-	 */
-	public void setDown() {
+	
+	public synchronized void setDown() {
 		inUse = false;
 	}
 }

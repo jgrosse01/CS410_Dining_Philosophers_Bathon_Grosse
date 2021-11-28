@@ -1,6 +1,7 @@
 package theDinnerTable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @desc A class which defines a {@code Philosopher}. It runs a thread which
@@ -46,8 +47,9 @@ public class Philosopher implements Runnable {
 	// position at the table, they cannot move
 	private final int pos;
 
+
 	// list of chopsticks being held
-	private ArrayList<Chopstick> chopsticks;
+	private List<Chopstick> chopsticks;
 
 	// amount of rice each philosopher has eaten
 	private int riceEaten;
@@ -151,8 +153,8 @@ public class Philosopher implements Runnable {
 	 *       if they are available.
 	 */
 	public void hungry() {
-		System.out.println(thread.getName() + " is Hungry.");
-		setChopsticks(t.findChopsticks(this));
+		System.out.println (thread.getName() + " is hungry.");
+		setChopsticks(t.findChopsticks(pos));
 		state = State.Eating;
 		System.out.println(thread.getName() + " picked up " + chopsticks.get(0).toString() + " and "
 				+ chopsticks.get(1).toString());
@@ -176,7 +178,7 @@ public class Philosopher implements Runnable {
 	/**
 	 * @desc Acquires {@code Chopstick} objects from the table.
 	 */
-	public synchronized void setChopsticks(ArrayList<Chopstick> chopsticks) {
+	public synchronized void setChopsticks(List<Chopstick> chopsticks) {
 		this.chopsticks = chopsticks;
 	}
 
@@ -184,7 +186,7 @@ public class Philosopher implements Runnable {
 	 * @desc Returns the list of {@code Chopstick} objects that the {@code Philosopher} currently has.
 	 * @return A list of currently held {@code Chopstick} objects.
 	 */
-	public synchronized ArrayList<Chopstick> getChopsticks() {
+	public synchronized List<Chopstick> getChopsticks() {
 		return chopsticks;
 	}
 
