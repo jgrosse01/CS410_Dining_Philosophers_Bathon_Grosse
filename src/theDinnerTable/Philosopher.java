@@ -10,7 +10,6 @@ import java.util.List;
  * 
  * @author Jaden Bathon and Jake Grosse
  *
- * @see Table
  * @see Runnable
  * @see Chopstick
  */
@@ -116,7 +115,7 @@ public class Philosopher implements Runnable {
 	}
 
 	/**
-	 * @desc
+	 * @desc 
 	 */
 	@Override
 	public void run() {
@@ -138,22 +137,21 @@ public class Philosopher implements Runnable {
 		System.out.println(thread.getName() + " has eaten a total of " + riceEaten + " ounces of rice.");
 	}
 
-	/**
-	 * @desc Literally idles for the random time that was defined for this {@code Philosopher} in state.
-	 */
-	public void think() {
+
+	 // Literally idles for the random time that was defined for this Philosopher in state.
+	private void think() {
 		System.out.println(thread.getName() + " is thinking.");
-		doPhilosophy();
+		doTask();
 		state = State.Hungry;
 	}
 
-	/**
-	 * @desc Tries to acquire {@code Chopstick} objects. Synchronized methods called
-	 *       by {@code findChopsticks(Philosopher)} to check for adjacent
-	 *       {@code Chopstick} objects without them being updated and then grabs two
+	/*
+	 * Tries to acquire Chopstick objects. Synchronized methods called
+	 *      by findChopsticks(Philosopher) to check for adjacent
+	 *       Chopstick objects without them being updated and then grabs two
 	 *       if they are available.
 	 */
-	public void hungry() {
+	private void hungry() {
 		System.out.println (thread.getName() + " is hungry.");
 		setChopsticks(t.findChopsticks(pos));
 		state = State.Eating;
@@ -161,10 +159,10 @@ public class Philosopher implements Runnable {
 				+ chopsticks.get(1).toString());
 	}
 
-	/**
-	 * @desc Tells the {@code Philosopher} to eat rice.
-	 */
-	public void eatRice() {
+	
+	// Tells the Philosopher to eat rice.
+
+	private void eatRice() {
 		// initialize rice vars
 		int riceRequested;
 		int riceRecieved;
@@ -178,17 +176,16 @@ public class Philosopher implements Runnable {
 		// print that the Philosopher ate riceReceieved amount of rice
 		System.out.println(thread.getName() + " ate " + riceRecieved + " ounces of rice.");
 		// thread takes time to do the thing
-		doPhilosophy();
+		doTask();
 		// put down the chopsticks
 		returnChopsticks();
 		// set state back to thinking
 		state = State.Thinking;
 	}
 
-	/**
-	 * @desc Acquires {@code Chopstick} objects from the table.
-	 */
-	public synchronized void setChopsticks(List<Chopstick> chopsticks) {
+	
+	// Acquires Chopstick objects from the table.
+	private synchronized void setChopsticks(List<Chopstick> chopsticks) {
 		this.chopsticks = chopsticks;
 	}
 
@@ -200,10 +197,9 @@ public class Philosopher implements Runnable {
 		return chopsticks;
 	}
 
-	/**
-	 * @desc Puts {@code Chopstick} objects back on the table IN THE SAME SPOTS they were in before.
-	 */
-	public synchronized void returnChopsticks() {
+	// Puts chopsticks objects back on the table IN THE SAME SPOTS they were in before.
+	
+	private synchronized void returnChopsticks() {
 		// places chopsticks back down on the table
 		t.placeChopsticks(chopsticks);
 		// print that this is done
@@ -214,7 +210,7 @@ public class Philosopher implements Runnable {
 	}
 	
 	// method to create delays equal to the amount of time each state takes to process.
-	private void doPhilosophy() {
+	private void doTask() {
 		// Sleep for the amount of time necessary to do the state
 		try {
 			Thread.sleep(state.stateTime);
