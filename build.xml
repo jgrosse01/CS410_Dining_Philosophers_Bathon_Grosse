@@ -3,6 +3,9 @@
   <property name="src" location="src"/>
   <property name="dist" location="dist"/>
 
+  <property name="package" value="theDinnerTable"/>
+  <property name="main" value="Table"/>
+	
   <!--Initializes Output Directory-->
   <target name="init">
     <mkdir dir="${dist}"/>
@@ -16,16 +19,16 @@
 
   <!--compiles jar itself and places in the folder selected-->
   <target name="jar" depends="init,compile">
-    <jar destfile="${dist}/DiningPhils.jar" basedir="${dist}/classes">
+    <jar destfile="${dist}/${ant.project.name}.jar" basedir="${dist}/classes">
       <manifest>
-        <attribute name="Main-Class" value="theDinnerTable/Table.java"/>
+        <attribute name="Main-Class" value="${package}/${main}"/>
       </manifest>
     </jar>
   </target>
 
   <!--runs the jar on a fork-->
   <target name="run" depends="jar">
-    <java jar="${dist}/DiningPhils.jar" fork="true"/>
+    <java jar="${dist}/${ant.project.name}.jar" fork="true"/>
   </target>
 
   <!--creates a clean command which empties dist folder-->
@@ -33,3 +36,4 @@
     <delete dir="${dist}"/>
   </target>
 </project>
+
