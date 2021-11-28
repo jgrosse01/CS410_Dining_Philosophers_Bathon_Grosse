@@ -4,7 +4,6 @@ package theDinnerTable;
  * @desc Class which defines {@code Chopstick}
  * 
  * @author Jaden Bathon and Jake Grosse
- *
  */
 public class Chopstick {
 	// instance variables defining a chopstick
@@ -42,6 +41,9 @@ public class Chopstick {
 		return inUse;
 	}
 	
+	/**
+	 * @desc A synchronized method to pickup {@code Chopstick} objects and throw an error if the {@code Chopstick} is in use.
+	 */
 	public synchronized void pickUp() {
       if (inUse) {
         throw new IllegalStateException("Attempt to steal a chopstick from another Philosopher");
@@ -49,6 +51,9 @@ public class Chopstick {
 		inUse = true;
 	}
 	
+	/**
+	 * @desc A synchronized method to put down this {@code Chopstick} object.
+	 */
 	public synchronized void setDown() {
 		inUse = false;
 	}
