@@ -11,8 +11,10 @@ import java.util.List;
  * @author Jaden Bathon and Jake Grosse
  *
  * @see Table
- * @see Runnable
  * @see Chopstick
+ * @see Runnable
+ * @see List
+ * @see ArrayList
  */
 public class Philosopher implements Runnable {
 
@@ -143,7 +145,7 @@ public class Philosopher implements Runnable {
 	 */
 	public void think() {
 		System.out.println(thread.getName() + " is thinking.");
-		doPhilosophy();
+		doTask();
 		state = State.Hungry;
 	}
 
@@ -178,7 +180,7 @@ public class Philosopher implements Runnable {
 		// print that the Philosopher ate riceReceieved amount of rice
 		System.out.println(thread.getName() + " ate " + riceRecieved + " ounces of rice.");
 		// thread takes time to do the thing
-		doPhilosophy();
+		doTask();
 		// put down the chopsticks
 		returnChopsticks();
 		// set state back to thinking
@@ -214,7 +216,7 @@ public class Philosopher implements Runnable {
 	}
 	
 	// method to create delays equal to the amount of time each state takes to process.
-	private void doPhilosophy() {
+	private void doTask() {
 		// Sleep for the amount of time necessary to do the state
 		try {
 			Thread.sleep(state.stateTime);
