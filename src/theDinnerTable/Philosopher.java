@@ -1,6 +1,7 @@
 package theDinnerTable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Philosopher implements Runnable {
 
@@ -26,7 +27,7 @@ public class Philosopher implements Runnable {
 	
 	private final int pos;
 	
-	private ArrayList<Chopstick> chopsticks;
+	private List<Chopstick> chopsticks;
 	
 	private int riceEaten;
 	
@@ -106,8 +107,8 @@ public class Philosopher implements Runnable {
 	 *       if they're available
 	 */
 	public void hungry() {
-		System.out.println (thread.getName() + " is Hungry.");
-		setChopsticks(t.findChopsticks(this));
+		System.out.println (thread.getName() + " is hungry.");
+		setChopsticks(t.findChopsticks(pos));
 		state = State.Eating;
 		System.out.println(thread.getName() + " picked up " + chopsticks.get(0).toString() + " and " + chopsticks.get(1).toString());
 	}
@@ -130,11 +131,11 @@ public class Philosopher implements Runnable {
 	/**
 	 * @desc acquires chopsticks from the table
 	 */
-	public synchronized void setChopsticks(ArrayList<Chopstick> chopsticks) {
+	public synchronized void setChopsticks(List<Chopstick> chopsticks) {
 	  this.chopsticks = chopsticks;
 	}
 	
-	public synchronized ArrayList<Chopstick> getChopsticks() {
+	public synchronized List<Chopstick> getChopsticks() {
 		  return chopsticks;
 		}
 	

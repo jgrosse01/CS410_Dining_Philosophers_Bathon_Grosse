@@ -1,6 +1,7 @@
 package theDinnerTable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Table {
 	
@@ -26,7 +27,7 @@ public class Table {
 	}
 	
 	private Philosopher[] phils;
-	private ArrayList<Chopstick> chopsticks;
+	private List<Chopstick> chopsticks;
 	private int riceBowl;
 	
 	Table() {
@@ -39,18 +40,17 @@ public class Table {
 		}
 	}
 	
-	public ArrayList<Chopstick> findChopsticks(Philosopher p) {
-		final int pos = p.getPos();
+	public List<Chopstick> findChopsticks(int pos) {
 		final int[] range = posRange(pos);
-		ArrayList<Chopstick> chops = new ArrayList<Chopstick>();
+		List<Chopstick> chops = new ArrayList<Chopstick>();
 		synchronized (chopsticks) {
 			while (chops.size() < 2) {
 				for (int i : range) {
 					Chopstick c = chopsticks.get(i);
-					if(!c.isInUse()) {
+					try {
 						c.pickUp();
 						chops.add(c);
-					} else {
+					} catch (IllegalStateException e) {
 						// Prevents Deadlock from everyone holding one stick.
 						for(Chopstick chop : chops) {
 							chop.setDown();
@@ -72,13 +72,13 @@ public class Table {
 		return chops;
 	}
 	
-	public void placeChopsticks(ArrayList<Chopstick> chopstick) {
+	public void placeChopsticks(List<Chopstick> chopstick) {
 		synchronized (chopsticks) {
 			chopsticks.notifyAll();
-		}
 		for(Chopstick c : chopsticks) {
 			c.setDown();
 		}
+	      }
 	}
 	
 	private int[] posRange(int pos) {

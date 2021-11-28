@@ -18,11 +18,14 @@ public class Chopstick {
 		return inUse;
 	}
 	
-	public void pickUp() {
+	public synchronized void pickUp() {
+      if (inUse) {
+        throw new IllegalStateException("Attempt to steal a chopstick from another Philosopher");
+      }
 		inUse = true;
 	}
 	
-	public void setDown() {
+	public synchronized void setDown() {
 		inUse = false;
 	}
 }
