@@ -1,0 +1,35 @@
+<project name="Dining_Philosphers" default="compile" basedir=".">
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="dist" location="dist"/>
+
+  <!--Initializes Output Directory-->
+  <target name="init">
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${dist}/classes"/>
+  </target>
+
+  <!--Where we compile jars.-->
+  <target name="compile" depends="init">
+    <javac includeantruntime="false" srcdir="${src}" destdir="${dist}/classes"/>
+  </target>
+
+  <!--compiles jar itself and places in the folder selected-->
+  <target name="jar" depends="init,compile">
+    <jar destfile="${dist}/DiningPhils.jar" basedir="${dist}/classes">
+      <manifest>
+        <attribute name="Main-Class" value="theDinnerTable/Table.java"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <!--runs the jar on a fork-->
+  <target name="run" depends="jar">
+    <java jar="${dist}/DiningPhils.jar" fork="true"/>
+  </target>
+
+  <!--creates a clean command which empties dist folder-->
+  <target name="clean">
+    <delete dir="${dist}"/>
+  </target>
+</project>
