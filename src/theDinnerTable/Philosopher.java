@@ -50,7 +50,6 @@ public class Philosopher implements Runnable {
 	// position at the table, they cannot move
 	private final int pos;
 
-
 	// list of chopsticks being held
 	private List<Chopstick> chopsticks;
 
@@ -141,7 +140,8 @@ public class Philosopher implements Runnable {
 	}
 
 	/**
-	 * @desc Literally idles for the random time that was defined for this {@code Philosopher} in state.
+	 * @desc Literally idles for the random time that was defined for this
+	 *       {@code Philosopher} in state.
 	 */
 	public void think() {
 		System.out.println(thread.getName() + " is thinking.");
@@ -156,7 +156,7 @@ public class Philosopher implements Runnable {
 	 *       if they are available.
 	 */
 	public void hungry() {
-		System.out.println (thread.getName() + " is hungry.");
+		System.out.println(thread.getName() + " is hungry.");
 		setChopsticks(t.findChopsticks(pos));
 		state = State.Eating;
 		System.out.println(thread.getName() + " picked up " + chopsticks.get(0).toString() + " and "
@@ -170,7 +170,7 @@ public class Philosopher implements Runnable {
 		// initialize rice vars
 		int riceRequested;
 		int riceRecieved;
-		
+
 		// rice requested is a random number between 1 and 3
 		riceRequested = Math.max((int) (Math.random() * 3), 1);
 		// rice received is the min between rice requested and rice in the bowl
@@ -195,7 +195,8 @@ public class Philosopher implements Runnable {
 	}
 
 	/**
-	 * @desc Returns the list of {@code Chopstick} objects that the {@code Philosopher} currently has.
+	 * @desc Returns the list of {@code Chopstick} objects that the
+	 *       {@code Philosopher} currently has.
 	 * @return A list of currently held {@code Chopstick} objects.
 	 */
 	public synchronized List<Chopstick> getChopsticks() {
@@ -203,7 +204,8 @@ public class Philosopher implements Runnable {
 	}
 
 	/**
-	 * @desc Puts {@code Chopstick} objects back on the table IN THE SAME SPOTS they were in before.
+	 * @desc Puts {@code Chopstick} objects back on the table IN THE SAME SPOTS they
+	 *       were in before.
 	 */
 	public synchronized void returnChopsticks() {
 		// places chopsticks back down on the table
@@ -214,8 +216,9 @@ public class Philosopher implements Runnable {
 		// set the list of currently held chopsticks to null
 		chopsticks = null;
 	}
-	
-	// method to create delays equal to the amount of time each state takes to process.
+
+	// method to create delays equal to the amount of time each state takes to
+	// process.
 	private void doTask() {
 		// Sleep for the amount of time necessary to do the state
 		try {
