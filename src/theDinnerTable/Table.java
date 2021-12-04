@@ -16,12 +16,9 @@ import java.util.List;
  */
 public class Table {
   // number of philosophers per table
-  private static final int NUM_PHILS = 5;
+  private final int numPhils;
   // irrelevant commented out line of code.
   // private static final int NUM_TABLES = 1;
-
-  // ounces of rice at the table to start
-  private static final int OUNCES_OF_RICE = 64;
 
   /**
    * @desc Main method which will run the rest of the program
@@ -33,7 +30,7 @@ public class Table {
     System.out.println("Dinner has started.");
 
     // make the table
-    Table t = new Table();
+    Table t = new Table(5,64);
 
     // initialize the philosophers at the table
     for (Philosopher p : t.phils) {
@@ -58,17 +55,24 @@ public class Table {
 
   /**
    * @desc Constructor to initialize table.
+   * 
+   * @param numPhils The  number of {@code Philosopher}s at the table
+   * @param ouncesOfRice The amount of rice the table starts with.
    */
-  Table() {
+  Table(int numPhils, int ouncesOfRice) {
+    
+    this.numPhils = numPhils;
     // make philosophers a new array of length NUM_PHILS
-    phils = new Philosopher[NUM_PHILS];
+    phils = new Philosopher[numPhils];
     // initialize chopstick list
     chopsticks = new ArrayList<Chopstick>();
+    // assigns the rice to the table
+    riceBowl = ouncesOfRice;
     // make new phils and chopsticks to populate lists
-    for (int i = 0; i < NUM_PHILS; i++) {
+    for (int i = 0; i < numPhils; i++) {
       phils[i] = new Philosopher(this, i);
       chopsticks.add(new Chopstick(i));
-      riceBowl = OUNCES_OF_RICE;
+
     }
   }
 
@@ -91,12 +95,12 @@ public class Table {
         for (int i : range) {
           Chopstick c = chopsticks.get(i);
           // try to pick it up
-          try {
+          if(!c.isInUse()) {
             c.pickUp();
             chops.add(c);
             // catch thrown error by setting the chopstick down to prevent errors or
             // deadlocks
-          } catch (IllegalStateException e) {
+          } else {
             // Prevents Deadlock from everyone holding one stick.
             for (Chopstick chop : chops) {
               chop.setDown();
@@ -138,10 +142,10 @@ public class Table {
   // pos
   private int[] posRange(int pos) {
     if (pos == 0) {
-      return new int[] { NUM_PHILS - 1, 0, 1 };
+      return new int[] { numPhils - 1, 0, 1 };
     }
-    if (pos == NUM_PHILS - 1) {
-      return new int[] { NUM_PHILS - 2, NUM_PHILS - 1, 0 };
+    if (pos == numPhils - 1) {
+      return new int[] { numPhils - 2, numPhils - 1, 0 };
     }
     return new int[] { pos - 1, pos, pos + 1 };
   }
